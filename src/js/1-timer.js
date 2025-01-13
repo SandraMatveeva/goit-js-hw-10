@@ -15,11 +15,15 @@ const timer = {
     minutes: document.querySelector('[data-minutes]'),
     seconds: document.querySelector('[data-seconds]'),
     button: document.querySelector('[data-start]'),
+    input: document.querySelector('#datetime-picker'),
   },
 
   addEvent() {},
 
   start() {
+    this.elements.button.disabled = true; // делаю неактивную кнопку
+    this.elements.input.disabled = true; // делаю неактивний input
+
     this.intervalId = setInterval(() => {
       const diffTime = this.deadLine - Date.now();
 
@@ -28,8 +32,6 @@ const timer = {
 
         return;
       }
-
-      console.log(diffTime);
 
       const timeComponents = this.convertMs(diffTime);
       this.elements.days.textContent = this.pad(timeComponents.days);
@@ -45,6 +47,7 @@ const timer = {
     this.elements.hours.textContent = '00';
     this.elements.minutes.textContent = '00';
     this.elements.seconds.textContent = '00';
+    this.elements.input.disabled = false;
   },
 
   convertMs(ms) {
@@ -98,14 +101,9 @@ flatpickr('#datetime-picker', {
       color: 'green',
       position: 'topRight',
     });
-    console.log('Дедлайн встановлено:', timer.deadLine);
   },
 });
 
 timer.elements.button.addEventListener('click', () => {
   timer.start();
 });
-
-console.log(timer.convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-console.log(timer.convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-console.log(timer.convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}

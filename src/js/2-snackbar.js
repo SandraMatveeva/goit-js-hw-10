@@ -7,37 +7,38 @@ const form = document.querySelector('.form');
 
 form.addEventListener('submit', function (event) {
   event.preventDefault();
-  console.dir(event.target);
-  const delay = event.target[0].value;
-  const isChecked = event.target[2].checked;
+
+  const delay = form.elements.delay.value;
+  const isChecked = form.elements.state.value === 'fulfilled';
+  // console.log(form.elements.state);
 
   const promise = new Promise((resolve, reject) => {
     setTimeout(() => {
       if (isChecked) {
-        resolve('Fulfilled');
+        resolve(delay);
       } else {
-        reject('Rejected');
+        reject(delay);
       }
     }, delay);
   });
 
   promise.then(
     value => {
+      // console.log(value);
       iziToast.show({
-        message: `✅ Fulfilled promise in ${delay}ms`,
+        message: `✅ Fulfilled promise in ${value}ms`,
 
         color: 'green',
         position: 'topRight',
       });
-      console.log(value); // "Success! Value passed to resolve function"
     },
     error => {
+      // console.log(error);
       iziToast.show({
-        message: `❌ Rejected promise in ${delay}ms`,
+        message: `❌ Rejected promise in ${error}ms`,
         color: 'red',
         position: 'topRight',
       });
-      console.log(error); // "Error! Error passed to reject function"
     }
   );
 });
